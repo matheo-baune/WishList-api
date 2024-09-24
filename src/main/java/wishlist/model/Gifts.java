@@ -6,11 +6,11 @@ import lombok.Setter;
 
 import java.util.Date;
 
-@Getter
 @Setter
+@Getter
 @Entity
-@Table(name = "groups")
-public class Group {
+@Table(name = "gifts")
+public class Gifts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,11 +18,20 @@ public class Group {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "created_by", nullable = false)
-    private Integer createdBy;
+    @Column(name = "description")
+    private String description;
 
-    @Column(name = "code", nullable = false)
-    private String code;
+    @Column(name = "link")
+    private String link;
+
+    @Column(name = "price")
+    private Double price;
+
+    @Column(name = "created_by", nullable = false)
+    private Long createdBy;
+
+    @Column(name = "group_id", nullable = false)
+    private Long groupId;
 
     @Column(name = "created_at", nullable = false)
     private Date createdAt;
