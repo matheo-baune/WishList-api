@@ -1,11 +1,11 @@
-package com.baune.wishlist.api.controller;
+package wishlist.api.controller;
 
-import com.baune.wishlist.service.GroupService;
+import org.springframework.web.bind.annotation.*;
+import wishlist.model.Group;
+import wishlist.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 @RestController
 public class GroupController {
@@ -21,6 +21,18 @@ public class GroupController {
     @GetMapping("/groups")
     public String getGroupsForUser(@RequestParam int idUser) {
         return "This is a string response " + idUser;
+    }
+
+    @GetMapping("/all-groups")
+    @ResponseBody
+    public List<Group> getAllGroups() {
+        return groupService.getAllGroups();
+    }
+
+    @GetMapping("/group/{id}")
+    @ResponseBody
+    public Group getGroupById(@PathVariable Long id) {
+        return groupService.getGroupById(id);
     }
 
     // POST MAPPING
