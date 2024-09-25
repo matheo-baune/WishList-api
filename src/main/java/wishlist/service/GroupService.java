@@ -1,24 +1,64 @@
 package wishlist.service;
 
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
+import wishlist.dto.GroupDTO;
+import wishlist.mapper.GroupMapper;
 import wishlist.model.Group;
 import wishlist.repository.GroupRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GroupService {
     private final GroupRepository groupRepository;
+    private final GroupMapper groupMapper;
 
-    public GroupService(GroupRepository groupRepository) {
+    public GroupService(GroupRepository groupRepository, GroupMapper groupMapper) {
         this.groupRepository = groupRepository;
+        this.groupMapper = groupMapper;
     }
 
-    public List<Group> getAllGroups() {
-        return groupRepository.findAll();
+    public List<GroupDTO> getAllGroups() {
+        return groupRepository.findAll().stream()
+                .map(groupMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Group getGroupById(Long id) {
-        return groupRepository.findById(id).orElse(null);
+    public GroupDTO getGroupById(Long id) {
+        return groupRepository.findById(id)
+                .map(groupMapper::toDTO)
+                .orElse(null);
+    }
+
+    public GroupDTO createGroup(GroupDTO groupDTO) {
+        Group group = groupMapper.toEntity(groupDTO);
+        Group savedGroup = groupRepository.save(group);
+        return groupMapper.toDTO(savedGroup);
+    }
+
+    public boolean deleteGroup(Long id) {
+        if (groupRepository.existsById(id)) {
+            groupRepository.deleteById(id);
+            return !groupRepository.existsById(id);
+        }
+        return false;
+    }
+
+    public GroupDTO updateGroup(Long id, @Valid GroupDTO groupDTO) {
+        return groupRepository.findById(id).map(existingGroup -> {
+            if (groupDTO.getName() != null) {
+                existingGroup.setName(groupDTO.getName());
+            }
+            if (groupDTO.getCreatedBy() != null) {
+                existingGroup.setCreatedBy(groupDTO.getCreatedBy());
+            }
+            if (groupDTO.getCode() != null) {
+                existingGroup.setCode(groupDTO.getCode());
+            }
+            Group updatedGroup = groupRepository.save(existingGroup);
+            return groupMapper.toDTO(updatedGroup);
+        }).orElse(null);
     }
 }
