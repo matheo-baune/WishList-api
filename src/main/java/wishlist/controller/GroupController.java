@@ -23,7 +23,7 @@ public class GroupController {
     }
 
     // GET MAPPING
-    @GetMapping
+    @GetMapping({"", "/"})
     public ResponseEntity<List<GroupDTO>> getAllGroups() {
         List<GroupDTO> groups = groupService.getAllGroups();
         return new ResponseEntity<>(groups, HttpStatus.OK);
@@ -36,7 +36,7 @@ public class GroupController {
     }
 
     // POST MAPPING
-    @PostMapping
+    @PostMapping({"", "/"})
     public ResponseEntity<GroupDTO> createGroup(@Valid @RequestBody GroupDTO groupDTO) {
         GroupDTO createdGroup = groupService.createGroup(groupDTO);
         return new ResponseEntity<>(createdGroup, HttpStatus.CREATED);
