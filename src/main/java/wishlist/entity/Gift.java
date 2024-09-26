@@ -1,16 +1,14 @@
-package wishlist.model;
+package wishlist.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.Date;
 
-@Setter
-@Getter
+@Data
 @Entity
 @Table(name = "gifts")
-public class Gifts {
+public class Gift {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

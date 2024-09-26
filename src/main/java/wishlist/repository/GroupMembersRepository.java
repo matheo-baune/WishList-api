@@ -1,7 +1,10 @@
 package wishlist.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import wishlist.model.GroupMembers;
+import org.springframework.data.jpa.repository.Query;
+import wishlist.entity.GroupMember;
 
-public interface GroupMembersRepository extends JpaRepository<GroupMembers, Long> {
+import java.util.Collection;
+
+public interface GroupMembersRepository extends JpaRepository<GroupMember, Long> {
 }

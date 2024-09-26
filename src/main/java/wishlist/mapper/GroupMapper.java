@@ -2,7 +2,7 @@ package wishlist.mapper;
 
 import org.mapstruct.Mapper;
 import wishlist.dto.GroupDTO;
-import wishlist.model.Group;
+import wishlist.entity.Group;
 
 @Mapper(componentModel = "spring")
 public interface GroupMapper {

@@ -1,29 +1,26 @@
 package wishlist.service;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import wishlist.dto.GroupDTO;
 import wishlist.mapper.GroupMapper;
-import wishlist.model.Group;
+import wishlist.entity.Group;
 import wishlist.repository.GroupRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class GroupService {
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
 
-    public GroupService(GroupRepository groupRepository, GroupMapper groupMapper) {
-        this.groupRepository = groupRepository;
-        this.groupMapper = groupMapper;
-    }
-
     public List<GroupDTO> getAllGroups() {
         return groupRepository.findAll().stream()
                 .map(groupMapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public GroupDTO getGroupById(Long id) {
