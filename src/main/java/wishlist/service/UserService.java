@@ -5,9 +5,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import wishlist.dto.GroupDTO;
 import wishlist.dto.UserDTO;
+import wishlist.entity.Group;
 import wishlist.entity.GroupMember;
 import wishlist.entity.User;
+import wishlist.mapper.GroupMapper;
 import wishlist.mapper.UserMapper;
 import wishlist.repository.GroupMembersRepository;
 import wishlist.repository.UserRepository;
@@ -15,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +27,7 @@ public class UserService implements UserDetailsService {
     private final GroupMembersRepository groupMembersRepository;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final GroupMapper groupMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -48,7 +53,23 @@ public class UserService implements UserDetailsService {
                 .orElse(null);
     }
 
-    public List<UserDTO> getAllGroupOfUser(Long id) {
-        return null;
+    public List<GroupDTO> getAllGroupOfUser(Long id) {
+        List<Group> userGroups = groupMembersRepository.findGroupsByUserId(id);
+        return userGroups.stream()
+                .map(groupMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    public UserDTO updateUser(Long id, UserDTO userDTO) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        user.setUsername(userDTO.getUsername());
+        user.setRole(userDTO.getRole());
+        user.setEmail(userDTO.getEmail());
+        return userMapper.toDTO(userRepository.save(user));
     }
 }

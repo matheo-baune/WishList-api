@@ -3,10 +3,7 @@ package wishlist.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import wishlist.dto.GroupDTO;
 import wishlist.dto.UserDTO;
 import wishlist.service.UserService;
@@ -33,5 +30,21 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}/groups")
+    public ResponseEntity<List<GroupDTO>> getAllGroupOfUser(@PathVariable Long id) {
+        List<GroupDTO> groups = userService.getAllGroupOfUser(id);
+        return new ResponseEntity<>(groups, HttpStatus.OK);
+    }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+        UserDTO user = userService.updateUser(id, userDTO);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

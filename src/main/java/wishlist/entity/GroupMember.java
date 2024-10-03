@@ -14,11 +14,13 @@ public class GroupMember {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "group_id", nullable = false)
-    private Long groupId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group group;
 
     @Column(name = "joined_at", nullable = false)
     private Date joinedAt;

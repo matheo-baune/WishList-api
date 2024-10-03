@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @Entity
@@ -25,6 +26,9 @@ public class Group {
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+
+    @OneToMany(mappedBy = "group")
+    private Set<GroupMember> groupMembers;
 
     @PrePersist
     protected void onCreate() {

@@ -40,7 +40,7 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/auth/*").permitAll()
+                        auth.requestMatchers("/auth/*", "/swagger-ui/**","/v3/api-docs/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtFilter(userService,jwtUtils), UsernamePasswordAuthenticationFilter.class)
