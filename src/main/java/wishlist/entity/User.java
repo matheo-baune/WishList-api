@@ -1,11 +1,13 @@
 package wishlist.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
 import java.util.Set;
 
+@Schema(description = "User object")
 @Data
 @Entity
 @Table(name = "users")

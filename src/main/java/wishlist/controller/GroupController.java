@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import wishlist.dto.GroupDTO;
 import wishlist.service.GroupService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class GroupController {
     private final GroupService groupService;
 
     // GET ENDPOINT
-    @GetMapping({"", "/"})
+    @GetMapping("/")
     public ResponseEntity<List<GroupDTO>> getAllGroups() {
         List<GroupDTO> groups = groupService.getAllGroups();
         return new ResponseEntity<>(groups, HttpStatus.OK);
@@ -32,7 +31,7 @@ public class GroupController {
     }
 
     // POST ENDPOINT
-    @PostMapping({"", "/"})
+    @PostMapping("/")
     public ResponseEntity<GroupDTO> createGroup(@Valid @RequestBody GroupDTO groupDTO) {
         GroupDTO createdGroup = groupService.createGroup(groupDTO);
         return new ResponseEntity<>(createdGroup, HttpStatus.CREATED);

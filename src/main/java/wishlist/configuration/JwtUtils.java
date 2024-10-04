@@ -29,6 +29,7 @@ public class JwtUtils {
         return createToken(claims, username);
     }
 
+
     private String createToken(Map<String, Object> claims, String username) {
         return Jwts.builder()
                 .claims(claims)
@@ -73,5 +74,13 @@ public class JwtUtils {
                 .parseSignedClaims(token)
                 .getPayload();
 
+    }
+
+    public String generatePermanentToken(String username) {
+        return Jwts.builder()
+                .subject(username)
+                .issuedAt(new Date())
+                .signWith(getSignKey())
+                .compact();
     }
 }

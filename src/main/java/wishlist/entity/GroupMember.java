@@ -1,10 +1,12 @@
 package wishlist.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
 
+@Schema(description = "GroupMember object")
 @Data
 @Entity
 @Table(name = "group_members")
