@@ -1,29 +1,24 @@
 package wishlist.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import wishlist.dto.GroupDTO;
-import wishlist.model.Group;
 import wishlist.service.GroupService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/groups")
 public class GroupController {
 
     private final GroupService groupService;
 
-    @Autowired
-    public GroupController(GroupService groupService) {
-        this.groupService = groupService;
-    }
-
-    // GET MAPPING
-    @GetMapping({"", "/"})
+    // GET ENDPOINT
+    @GetMapping("/")
     public ResponseEntity<List<GroupDTO>> getAllGroups() {
         List<GroupDTO> groups = groupService.getAllGroups();
         return new ResponseEntity<>(groups, HttpStatus.OK);
@@ -35,14 +30,14 @@ public class GroupController {
         return new ResponseEntity<>(group, HttpStatus.OK);
     }
 
-    // POST MAPPING
-    @PostMapping({"", "/"})
+    // POST ENDPOINT
+    @PostMapping("/")
     public ResponseEntity<GroupDTO> createGroup(@Valid @RequestBody GroupDTO groupDTO) {
         GroupDTO createdGroup = groupService.createGroup(groupDTO);
         return new ResponseEntity<>(createdGroup, HttpStatus.CREATED);
     }
 
-    // PATCH MAPPING
+    // PATCH ENDPOINT
     @PatchMapping("/{id}")
     public ResponseEntity<GroupDTO> updateGroup(@PathVariable Long id, @Valid @RequestBody GroupDTO groupDTO) {
         GroupDTO updatedGroup = groupService.updateGroup(id, groupDTO);
@@ -50,7 +45,7 @@ public class GroupController {
         return new ResponseEntity<>(updatedGroup, status);
     }
 
-    // DELETE MAPPING
+    // DELETE ENDPOINT
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteGroup(@PathVariable Long id) {
         boolean isDeleted = groupService.deleteGroup(id);
