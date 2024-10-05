@@ -1,16 +1,16 @@
-package wishlist.model;
+package wishlist.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.Date;
 
-@Setter
-@Getter
+@Schema(description = "Gift object")
+@Data
 @Entity
 @Table(name = "gifts")
-public class Gifts {
+public class Gift {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

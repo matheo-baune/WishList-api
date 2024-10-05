@@ -1,13 +1,14 @@
-package wishlist.model;
+package wishlist.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.Date;
+import java.util.Set;
 
-@Getter
-@Setter
+@Schema(description = "Group object")
+@Data
 @Entity
 @Table(name = "groups")
 public class Group {
@@ -25,5 +26,14 @@ public class Group {
     private String code;
 
     @Column(name = "created_at", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+
+    @OneToMany(mappedBy = "group")
+    private Set<GroupMember> groupMembers;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+    }
 }
