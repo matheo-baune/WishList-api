@@ -4,8 +4,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import wishlist.dto.GroupDTO;
+import wishlist.dto.UserDTO;
 import wishlist.mapper.GroupMapper;
 import wishlist.entity.Group;
+import wishlist.mapper.UserMapper;
+import wishlist.repository.GroupMembersRepository;
 import wishlist.repository.GroupRepository;
 
 import java.util.List;
@@ -15,7 +18,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GroupService {
     private final GroupRepository groupRepository;
+    private final GroupMembersRepository groupMembersRepository;
     private final GroupMapper groupMapper;
+    private final UserMapper userMapper;
 
     public List<GroupDTO> getAllGroups() {
         return groupRepository.findAll().stream()
@@ -57,5 +62,12 @@ public class GroupService {
             Group updatedGroup = groupRepository.save(existingGroup);
             return groupMapper.toDTO(updatedGroup);
         }).orElse(null);
+    }
+
+    public List<UserDTO> getAllUsersOfGroup(Long id) {
+        return groupMembersRepository.findUsersByGroupId(id).stream()
+                .map(userMapper::toDTO)
+                .collect(Collectors.toList());
+
     }
 }

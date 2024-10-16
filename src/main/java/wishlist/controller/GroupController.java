@@ -5,9 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import wishlist.dto.GroupDTO;
+import wishlist.dto.UserDTO;
 import wishlist.service.GroupService;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -21,28 +24,39 @@ public class GroupController {
     @GetMapping("/")
     public ResponseEntity<List<GroupDTO>> getAllGroups() {
         List<GroupDTO> groups = groupService.getAllGroups();
-        return new ResponseEntity<>(groups, HttpStatus.OK);
+        return ResponseEntity.ok(groups);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<GroupDTO> getGroupById(@PathVariable Long id) {
         GroupDTO group = groupService.getGroupById(id);
-        return new ResponseEntity<>(group, HttpStatus.OK);
+        return ResponseEntity.ok(group);
+    }
+
+    @GetMapping("/{id}/users")
+    public ResponseEntity<List<UserDTO>> getAllUsersOfGroup(@PathVariable Long id) {
+        List<UserDTO> users = groupService.getAllUsersOfGroup(id);
+        return ResponseEntity.ok(users);
     }
 
     // POST ENDPOINT
     @PostMapping("/")
     public ResponseEntity<GroupDTO> createGroup(@Valid @RequestBody GroupDTO groupDTO) {
         GroupDTO createdGroup = groupService.createGroup(groupDTO);
-        return new ResponseEntity<>(createdGroup, HttpStatus.CREATED);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(groupDTO.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(createdGroup);
     }
 
     // PATCH ENDPOINT
     @PatchMapping("/{id}")
-    public ResponseEntity<GroupDTO> updateGroup(@PathVariable Long id, @Valid @RequestBody GroupDTO groupDTO) {
+    public ResponseEntity<?> updateGroup(@PathVariable Long id, @Valid @RequestBody GroupDTO groupDTO) {
         GroupDTO updatedGroup = groupService.updateGroup(id, groupDTO);
-        HttpStatus status = updatedGroup != null ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR;
-        return new ResponseEntity<>(updatedGroup, status);
+        return updatedGroup != null ?
+                ResponseEntity.ok().body(updatedGroup) :
+                ResponseEntity.internalServerError().body("Group could not be updated (not existed or wrong identifier)");
     }
 
     // DELETE ENDPOINT
@@ -50,7 +64,7 @@ public class GroupController {
     public ResponseEntity<String> deleteGroup(@PathVariable Long id) {
         boolean isDeleted = groupService.deleteGroup(id);
         return isDeleted ?
-                new ResponseEntity<>(HttpStatus.NO_CONTENT) :
-                new ResponseEntity<>("Group could not be deleted (not existed or wrong identifier)", HttpStatus.INTERNAL_SERVER_ERROR);
+                ResponseEntity.ok("Group deleted successfully") :
+                ResponseEntity.internalServerError().body("Group could not be deleted (not existed or wrong identifier)");
     }
 }

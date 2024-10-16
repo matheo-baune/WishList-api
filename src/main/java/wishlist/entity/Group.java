@@ -29,11 +29,12 @@ public class Group {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-    @OneToMany(mappedBy = "group")
-    private Set<GroupMember> groupMembers;
-
     @PrePersist
     protected void onCreate() {
         createdAt = new Date();
     }
+
+    @OneToMany(mappedBy = "group")
+    private Set<GroupMember> groupMembers;
+
 }
