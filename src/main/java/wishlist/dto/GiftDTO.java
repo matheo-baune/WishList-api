@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Data
 public class GiftDTO {
@@ -27,8 +28,11 @@ public class GiftDTO {
     private Double price;
 
     @NotNull
+    private Long group_id;
+
+    @NotNull
     private Long created_by;
 
     @NotNull
-    private Long group_id;
+    private Date created_at;
 }

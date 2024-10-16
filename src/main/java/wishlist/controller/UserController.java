@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import wishlist.dto.GiftDTO;
 import wishlist.dto.GroupDTO;
 import wishlist.dto.UserDTO;
 import wishlist.service.UserService;
@@ -37,8 +38,15 @@ public class UserController {
     @Operation(summary = "Get all groups of a user")
     @GetMapping("/{id}/groups")
     public ResponseEntity<List<GroupDTO>> getAllGroupOfUser(@PathVariable Long id) {
-        List<GroupDTO> groups = userService.getAllGroupOfUser(id);
-        return ResponseEntity.ok(groups);
+        List<GroupDTO> groupDTOList = userService.getAllGroupOfUser(id);
+        return ResponseEntity.ok(groupDTOList);
+    }
+
+    @Operation(summary = "Get gifts of a user for group X")
+    @GetMapping("/{id}/groups/{groupId}/gifts")
+    public ResponseEntity<List<GiftDTO>> getAllGiftOfUserForGroup(@PathVariable Long id, @PathVariable Long groupId) {
+        List<GiftDTO> giftDTOList = userService.getAllGiftOfUserForGroup(id, groupId);
+        return ResponseEntity.ok(giftDTOList);
     }
 
 

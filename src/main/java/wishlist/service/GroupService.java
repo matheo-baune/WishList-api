@@ -3,6 +3,7 @@ package wishlist.service;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import wishlist.Utils;
 import wishlist.dto.GroupDTO;
 import wishlist.dto.UserDTO;
 import wishlist.entity.User;
@@ -52,13 +53,10 @@ public class GroupService {
         Group group = groupRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Group not found"));
 
-        group.setName(groupDTO.getName());
-        group.setCreated_by(groupDTO.getCreated_by());
-        group.setCode(groupDTO.getCode());
+        Utils.updateEntityFromDTO(groupDTO, group);
 
         Group updatedGroup = groupRepository.save(group);
         return groupMapper.toDTO(updatedGroup);
-
     }
 
     public boolean deleteGroup(Long id) {

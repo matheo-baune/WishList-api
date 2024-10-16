@@ -1,9 +1,13 @@
 package wishlist.service;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import wishlist.Utils;
 import wishlist.dto.GiftDTO;
+import wishlist.dto.GroupDTO;
 import wishlist.entity.Gift;
+import wishlist.entity.Group;
 import wishlist.mapper.GiftMapper;
 import wishlist.repository.GiftRepository;
 
@@ -31,6 +35,16 @@ public class GiftService {
         Gift gift = giftMapper.toEntity(giftDTO);
         Gift savedGift = giftRepository.save(gift);
         return giftMapper.toDTO(savedGift);
+    }
+
+    public GiftDTO updateGift(Long id, GiftDTO giftDTO) {
+        Gift gift = giftRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Gift not found"));
+
+        Utils.updateEntityFromDTO(giftDTO, gift);
+
+        Gift updatedgift = giftRepository.save(gift);
+        return giftMapper.toDTO(updatedgift);
     }
 
     public boolean deleteGiftById(Long id) {

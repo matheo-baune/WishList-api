@@ -1,5 +1,6 @@
 package wishlist.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -28,8 +29,9 @@ public class GiftController {
     }
 
 
+
     @PostMapping("/")
-    public ResponseEntity<?> createGift(@RequestBody GiftDTO giftDTO) {
+    public ResponseEntity<?> createGift(@Valid @RequestBody GiftDTO giftDTO) {
         GiftDTO giftCreated = giftService.createGift(giftDTO);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -37,6 +39,17 @@ public class GiftController {
                 .toUri();
         return ResponseEntity.created(location).body(giftCreated);
     }
+
+
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updateGift(@PathVariable Long id, @Valid @RequestBody GiftDTO giftDTO) {
+        GiftDTO updatedGift = giftService.updateGift(id, giftDTO);
+        return updatedGift != null ?
+                ResponseEntity.ok().body(updatedGift) :
+                ResponseEntity.internalServerError().body("Gift could not be updated (not existed or wrong identifier)");
+    }
+
 
 
     @DeleteMapping("/{id}")
