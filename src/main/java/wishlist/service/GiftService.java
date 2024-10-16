@@ -19,4 +19,18 @@ public class GiftService {
                 .map(giftMapper::toDTO)
                 .toList();
     }
+
+    public GiftDTO getGiftById(Long id) {
+        return giftRepository.findById(id)
+                .map(giftMapper::toDTO)
+                .orElse(null);
+    }
+
+    public boolean deleteGiftById(Long id) {
+        if (giftRepository.existsById(id)) {
+            giftRepository.deleteById(id);
+            return !giftRepository.existsById(id);
+        }
+        return false;
+    }
 }

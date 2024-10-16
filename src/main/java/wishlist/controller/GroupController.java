@@ -16,10 +16,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/groups")
 public class GroupController {
-
     private final GroupService groupService;
 
-    // GET ENDPOINT
+
     @GetMapping("/")
     public ResponseEntity<List<GroupDTO>> getAllGroups() {
         List<GroupDTO> groups = groupService.getAllGroups();
@@ -38,7 +37,8 @@ public class GroupController {
         return ResponseEntity.ok(users);
     }
 
-    // POST ENDPOINT
+
+
     @PostMapping("/")
     public ResponseEntity<GroupDTO> createGroup(@Valid @RequestBody GroupDTO groupDTO) {
         GroupDTO createdGroup = groupService.createGroup(groupDTO);
@@ -49,7 +49,8 @@ public class GroupController {
         return ResponseEntity.created(location).body(createdGroup);
     }
 
-    // PATCH ENDPOINT
+
+
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateGroup(@PathVariable Long id, @Valid @RequestBody GroupDTO groupDTO) {
         GroupDTO updatedGroup = groupService.updateGroup(id, groupDTO);
@@ -58,7 +59,8 @@ public class GroupController {
                 ResponseEntity.internalServerError().body("Group could not be updated (not existed or wrong identifier)");
     }
 
-    // DELETE ENDPOINT
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteGroup(@PathVariable Long id) {
         boolean isDeleted = groupService.deleteGroup(id);

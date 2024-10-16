@@ -18,8 +18,8 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
+
     //TODO - Rajouter de l'administration pour bloquer certaines routes aux utilisateurs non-administrateurs
-    //GET ENDPOINT
     @Operation(summary = "Create a new user")
     @GetMapping("/")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
@@ -41,6 +41,8 @@ public class UserController {
         return ResponseEntity.ok(groups);
     }
 
+
+
     @Operation(
             summary = "4. Update user",
             description = "This method allows you to update a user by providing the necessary details."
@@ -52,6 +54,9 @@ public class UserController {
                 ResponseEntity.ok().body(user) :
                 ResponseEntity.internalServerError().body("User could not be updated (not existed or wrong identifier)");
     }
+
+
+
     @Operation(summary = "Supprimer un utilisateur")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {

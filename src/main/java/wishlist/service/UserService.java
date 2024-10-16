@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import wishlist.dto.GroupDTO;
 import wishlist.dto.UserDTO;
 import wishlist.entity.Group;
-import wishlist.entity.GroupMember;
 import wishlist.entity.User;
 import wishlist.mapper.GroupMapper;
 import wishlist.mapper.UserMapper;
@@ -60,21 +59,23 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
-    public boolean deleteUser(Long id) {
-        if(!userRepository.existsById(id)) {
-            return false;
-        }
-
-        userRepository.deleteById(id);
-        return !userRepository.existsById(id);
-    }
-
     public UserDTO updateUser(Long id, UserDTO userDTO) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
         user.setUsername(userDTO.getUsername());
         user.setRole(userDTO.getRole());
         user.setEmail(userDTO.getEmail());
-        return userMapper.toDTO(userRepository.save(user));
+
+        User updatedUser = userRepository.save(user);
+        return userMapper.toDTO(updatedUser);
+    }
+
+    public boolean deleteUser(Long id) {
+        if(userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            return !userRepository.existsById(id);
+        }
+        return false;
     }
 }

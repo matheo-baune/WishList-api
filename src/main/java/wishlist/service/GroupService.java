@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import wishlist.dto.GroupDTO;
 import wishlist.dto.UserDTO;
+import wishlist.entity.User;
 import wishlist.mapper.GroupMapper;
 import wishlist.entity.Group;
 import wishlist.mapper.UserMapper;
@@ -34,10 +35,30 @@ public class GroupService {
                 .orElse(null);
     }
 
+    public List<UserDTO> getAllUsersOfGroup(Long id) {
+        List<User> usersList = groupMembersRepository.findUsersByGroupId(id);
+        return usersList.stream()
+                .map(userMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     public GroupDTO createGroup(GroupDTO groupDTO) {
         Group group = groupMapper.toEntity(groupDTO);
         Group savedGroup = groupRepository.save(group);
         return groupMapper.toDTO(savedGroup);
+    }
+
+    public GroupDTO updateGroup(Long id, @Valid GroupDTO groupDTO) {
+        Group group = groupRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found"));
+
+        group.setName(groupDTO.getName());
+        group.setCreatedBy(groupDTO.getCreatedBy());
+        group.setCode(groupDTO.getCode());
+
+        Group updatedGroup = groupRepository.save(group);
+        return groupMapper.toDTO(updatedGroup);
+
     }
 
     public boolean deleteGroup(Long id) {
@@ -46,28 +67,5 @@ public class GroupService {
             return !groupRepository.existsById(id);
         }
         return false;
-    }
-
-    public GroupDTO updateGroup(Long id, @Valid GroupDTO groupDTO) {
-        return groupRepository.findById(id).map(existingGroup -> {
-            if (groupDTO.getName() != null) {
-                existingGroup.setName(groupDTO.getName());
-            }
-            if (groupDTO.getCreatedBy() != null) {
-                existingGroup.setCreatedBy(groupDTO.getCreatedBy());
-            }
-            if (groupDTO.getCode() != null) {
-                existingGroup.setCode(groupDTO.getCode());
-            }
-            Group updatedGroup = groupRepository.save(existingGroup);
-            return groupMapper.toDTO(updatedGroup);
-        }).orElse(null);
-    }
-
-    public List<UserDTO> getAllUsersOfGroup(Long id) {
-        return groupMembersRepository.findUsersByGroupId(id).stream()
-                .map(userMapper::toDTO)
-                .collect(Collectors.toList());
-
     }
 }
