@@ -3,7 +3,6 @@ package wishlist.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import wishlist.dto.GroupDTO;
@@ -59,6 +58,6 @@ public class UserController {
         boolean isDeleted = userService.deleteUser(id);
         return isDeleted ?
                 ResponseEntity.ok().body("User deleted successfully") :
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body("User could not be deleted (not existed or wrong identifier)");
+                ResponseEntity.internalServerError().body("User could not be deleted (not existed or wrong identifier)");
     }
 }
