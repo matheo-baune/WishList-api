@@ -25,17 +25,23 @@ public class Gift {
     private String link;
 
     @Column(name = "image_url")
-    private String imageUrl;
+    private String image_url;
 
     @Column(name = "price")
     private Double price;
 
     @Column(name = "created_by", nullable = false)
-    private Long createdBy;
+    private Long created_by;
 
     @Column(name = "group_id", nullable = false)
-    private Long groupId;
+    private Long group_id;
 
     @Column(name = "created_at", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+    }
 }

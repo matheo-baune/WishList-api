@@ -14,7 +14,7 @@ public interface UserMapper {
             @Mapping(source = "username", target = "username"),
             @Mapping(source = "email", target = "email"),
             @Mapping(source = "role", target = "role"),
-            @Mapping(source = "createdAt", target = "createdAt")
+            @Mapping(source = "created_at", target = "created_at")
     })
     UserDTO toDTO(User user);
 

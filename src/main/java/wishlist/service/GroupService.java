@@ -53,7 +53,7 @@ public class GroupService {
                 .orElseThrow(() -> new IllegalArgumentException("Group not found"));
 
         group.setName(groupDTO.getName());
-        group.setCreatedBy(groupDTO.getCreatedBy());
+        group.setCreated_by(groupDTO.getCreated_by());
         group.setCode(groupDTO.getCode());
 
         Group updatedGroup = groupRepository.save(group);

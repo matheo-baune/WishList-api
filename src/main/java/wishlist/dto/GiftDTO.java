@@ -21,8 +21,14 @@ public class GiftDTO {
     private String link;
 
     @Size(max = 255)
-    private String imageUrl;
+    private String image_url;
 
     @NotNull
     private Double price;
+
+    @NotNull
+    private Long created_by;
+
+    @NotNull
+    private Long group_id;
 }

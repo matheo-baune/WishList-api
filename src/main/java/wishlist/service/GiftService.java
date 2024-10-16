@@ -3,6 +3,7 @@ package wishlist.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import wishlist.dto.GiftDTO;
+import wishlist.entity.Gift;
 import wishlist.mapper.GiftMapper;
 import wishlist.repository.GiftRepository;
 
@@ -24,6 +25,12 @@ public class GiftService {
         return giftRepository.findById(id)
                 .map(giftMapper::toDTO)
                 .orElse(null);
+    }
+
+    public GiftDTO createGift(GiftDTO giftDTO) {
+        Gift gift = giftMapper.toEntity(giftDTO);
+        Gift savedGift = giftRepository.save(gift);
+        return giftMapper.toDTO(savedGift);
     }
 
     public boolean deleteGiftById(Long id) {

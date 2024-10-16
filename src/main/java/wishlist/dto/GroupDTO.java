@@ -15,12 +15,12 @@ public class GroupDTO {
     private String name;
 
     @NotNull
-    private Integer createdBy;
+    private Integer created_by;
 
     @NotNull
     @Size(min = 1, max = 10)
     private String code;
 
     @NotNull
-    private String createdAt;
+    private String created_at;
 }
