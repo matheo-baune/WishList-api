@@ -24,6 +24,9 @@ public class Gift {
     @Column(name = "link")
     private String link;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(name = "price")
     private Double price;
 
