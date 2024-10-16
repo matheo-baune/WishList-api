@@ -5,9 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import wishlist.Utils;
 import wishlist.dto.GiftDTO;
-import wishlist.dto.GroupDTO;
 import wishlist.entity.Gift;
-import wishlist.entity.Group;
 import wishlist.mapper.GiftMapper;
 import wishlist.repository.GiftRepository;
 
@@ -31,7 +29,7 @@ public class GiftService {
                 .orElse(null);
     }
 
-    public GiftDTO createGift(GiftDTO giftDTO) {
+    public GiftDTO createGift(@Valid GiftDTO giftDTO) {
         Gift gift = giftMapper.toEntity(giftDTO);
         Gift savedGift = giftRepository.save(gift);
         return giftMapper.toDTO(savedGift);
