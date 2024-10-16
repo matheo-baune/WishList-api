@@ -60,8 +60,13 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteUser(Long id) {
+    public boolean deleteUser(Long id) {
+        if(!userRepository.existsById(id)) {
+            return false;
+        }
+
         userRepository.deleteById(id);
+        return !userRepository.existsById(id);
     }
 
     public UserDTO updateUser(Long id, UserDTO userDTO) {

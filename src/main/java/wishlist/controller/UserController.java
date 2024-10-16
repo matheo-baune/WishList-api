@@ -25,21 +25,21 @@ public class UserController {
     @GetMapping("/")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> users = userService.getAllUsers();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return ResponseEntity.ok(users);
     }
 
     @Operation(summary = "Get a specific user")
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
         UserDTO user = userService.getUserById(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return ResponseEntity.ok(user);
     }
 
     @Operation(summary = "Get all groups of a user")
     @GetMapping("/{id}/groups")
     public ResponseEntity<List<GroupDTO>> getAllGroupOfUser(@PathVariable Long id) {
         List<GroupDTO> groups = userService.getAllGroupOfUser(id);
-        return new ResponseEntity<>(groups, HttpStatus.OK);
+        return ResponseEntity.ok(groups);
     }
 
     @Operation(
@@ -47,14 +47,18 @@ public class UserController {
             description = "This method allows you to update a user by providing the necessary details."
     )
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
         UserDTO user = userService.updateUser(id, userDTO);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return user != null ?
+                ResponseEntity.ok().body(user) :
+                ResponseEntity.internalServerError().body("User could not be updated (not existed or wrong identifier)");
     }
     @Operation(summary = "Supprimer un utilisateur")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        boolean isDeleted = userService.deleteUser(id);
+        return isDeleted ?
+                ResponseEntity.ok().body("User deleted successfully") :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body("User could not be deleted (not existed or wrong identifier)");
     }
 }
