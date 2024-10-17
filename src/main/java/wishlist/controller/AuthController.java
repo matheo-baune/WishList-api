@@ -25,11 +25,14 @@ public class AuthController {
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
 
+
     @GetMapping("/generate-permanent-token")
     public ResponseEntity<String> generatePermanentToken() {
         String token = jwtUtils.generatePermanentToken("root");
         return ResponseEntity.ok(token);
     }
+
+
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {

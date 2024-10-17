@@ -1,14 +1,12 @@
 package wishlist.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
-@Getter
-@Setter
+@Data
 public class GroupDTO {
     private Long id;
 
@@ -17,9 +15,12 @@ public class GroupDTO {
     private String name;
 
     @NotNull
-    private Integer createdBy;
+    private Integer created_by;
 
     @NotNull
     @Size(min = 1, max = 10)
     private String code;
+
+    @NotNull
+    private String created_at;
 }
