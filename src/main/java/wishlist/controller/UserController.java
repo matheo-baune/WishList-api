@@ -51,6 +51,16 @@ public class UserController {
 
 
 
+    @PostMapping("/{userId}/gifts/{giftId}/reserve")
+    public ResponseEntity<?> reserveGift(@PathVariable Long userId, @PathVariable Long giftId) {
+        boolean isReserved = userService.reserveGift(userId, giftId);
+        return isReserved ?
+                ResponseEntity.ok().body("Gift reserved successfully") :
+                ResponseEntity.internalServerError().body("Gift could not be reserved (not existed or wrong identifier)");
+    }
+
+
+
     @Operation(
             summary = "4. Update user",
             description = "This method allows you to update a user by providing the necessary details."

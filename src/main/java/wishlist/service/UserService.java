@@ -11,12 +11,14 @@ import wishlist.dto.GroupDTO;
 import wishlist.dto.UserDTO;
 import wishlist.entity.Gift;
 import wishlist.entity.Group;
+import wishlist.entity.Reservation;
 import wishlist.entity.User;
 import wishlist.mapper.GiftMapper;
 import wishlist.mapper.GroupMapper;
 import wishlist.mapper.UserMapper;
 import wishlist.repository.GiftRepository;
 import wishlist.repository.GroupMembersRepository;
+import wishlist.repository.ReservationsRepository;
 import wishlist.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -32,6 +34,7 @@ public class UserService implements UserDetailsService {
     private final GiftMapper giftMapper;
     private final GroupMembersRepository groupMembersRepository;
     private final UserRepository userRepository;
+    private final ReservationsRepository reservationsRepository;
     private final UserMapper userMapper;
     private final GroupMapper groupMapper;
 
@@ -81,6 +84,17 @@ public class UserService implements UserDetailsService {
 
         User updatedUser = userRepository.save(user);
         return userMapper.toDTO(updatedUser);
+    }
+
+    public boolean reserveGift(Long userId, Long giftId) {
+        if (userRepository.existsById(userId) && giftRepository.existsById(giftId)) {
+            Reservation reservation = new Reservation();
+            reservation.setReserved_by(userId);
+            reservation.setGiftId(giftId);
+            reservationsRepository.save(reservation);
+            return true;
+        }
+        return false;
     }
 
     public boolean deleteUser(Long id) {

@@ -1,6 +1,7 @@
 package wishlist.dto;
 
 import lombok.Data;
+import wishlist.entity.User;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -31,8 +32,10 @@ public class GiftDTO {
     private Long group_id;
 
     @NotNull
-    private Long created_by;
+    private User created_by;
 
     @NotNull
     private Date created_at;
+
+    private boolean is_reserved;
 }

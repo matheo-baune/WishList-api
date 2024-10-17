@@ -9,7 +9,9 @@ import java.util.Date;
 @Schema(description = "Reservation object")
 @Data
 @Entity
-@Table(name = "reservations")
+@Table(name = "reservations", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"gift_id"})
+})
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +21,14 @@ public class Reservation {
     private Long giftId;
 
     @Column(name = "reserved_by", nullable = false)
-    private Integer reservedBy;
+    private Long reserved_by;
 
     @Column(name = "reserved_at", nullable = false)
-    private Date reservedAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date reserved_at;
+
+    @PrePersist
+    protected void onCreate() {
+        reserved_at = new Date();
+    }
 }

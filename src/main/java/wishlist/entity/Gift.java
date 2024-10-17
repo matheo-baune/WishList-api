@@ -30,8 +30,9 @@ public class Gift {
     @Column(name = "price")
     private Double price;
 
-    @Column(name = "created_by", nullable = false)
-    private Long created_by;
+    @OneToOne
+    @JoinColumn(name = "created_by", nullable = false)
+    private User created_by;
 
     @Column(name = "group_id", nullable = false)
     private Long group_id;
