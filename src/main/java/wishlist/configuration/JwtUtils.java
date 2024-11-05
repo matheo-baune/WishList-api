@@ -6,6 +6,7 @@ import io.jsonwebtoken.security.Keys;
 import  org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import wishlist.entity.User;
 
 import javax.crypto.SecretKey;
 import java.util.Base64;
@@ -45,7 +46,7 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(encodeKey);
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public Boolean validateToken(String token, User userDetails) {
         String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
@@ -55,7 +56,8 @@ public class JwtUtils {
     }
 
     private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        return false;
+        //return extractExpiration(token).before(new Date());
     }
 
     private Date extractExpiration(String token) {

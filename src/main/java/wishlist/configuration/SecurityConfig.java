@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import wishlist.entity.User;
 import wishlist.filter.JwtFilter;
 import wishlist.service.UserService;
 
@@ -31,7 +32,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userService).passwordEncoder(passwordEncoder());
+        authenticationManagerBuilder.userDetailsService(username -> (org.springframework.security.core.userdetails.UserDetails) userService.loadUserByUsername(username)).passwordEncoder(passwordEncoder());
         return authenticationManagerBuilder.build();
     }
 
@@ -40,7 +41,8 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/auth/*", "/swagger-ui/**","/v3/api-docs/**").permitAll()
+                        //auth.requestMatchers("/auth/*", "/swagger-ui/**","/v3/api-docs/**").permitAll()
+                        auth.requestMatchers("/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtFilter(userService,jwtUtils), UsernamePasswordAuthenticationFilter.class)

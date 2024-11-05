@@ -1,5 +1,6 @@
 package wishlist.entity;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -30,12 +31,12 @@ public class Gift {
     @Column(name = "price")
     private Double price;
 
-    @OneToOne
-    @JoinColumn(name = "created_by", nullable = false)
-    private User created_by;
+    @Column(name = "created_by", nullable = false)
+    private Long created_by;
 
-    @Column(name = "group_id", nullable = false)
-    private Long group_id;
+    @ManyToOne
+    @JoinColumn(name = "group_id", nullable = false)
+    private Group group;
 
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)

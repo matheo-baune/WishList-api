@@ -14,6 +14,9 @@ public class GroupDTO {
     @Size(min = 1, max = 100)
     private String name;
 
+    @Size(min = 1, max = 50)
+    private String description;
+
     @NotNull
     private Integer created_by;
 

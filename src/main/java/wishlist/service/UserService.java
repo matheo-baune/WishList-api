@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService  {
 
     private final GiftRepository giftRepository;
     private final GiftMapper giftMapper;
@@ -38,15 +38,13 @@ public class UserService implements UserDetailsService {
     private final UserMapper userMapper;
     private final GroupMapper groupMapper;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
         if (user == null)
             throw new UsernameNotFoundException("User not found with username : " + username);
-        return new org.springframework.security.core.userdetails.User(
+        return new User(
                 user.getUsername(),
-                user.getPassword(),
-                Collections.singleton(new SimpleGrantedAuthority(user.getRole()))
+                user.getPassword()
         );
     }
 

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import wishlist.dto.GiftDTO;
+import wishlist.entity.Gift;
 import wishlist.service.GiftService;
 
 import java.net.URI;
@@ -14,6 +15,7 @@ import java.net.URI;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/gifts")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class GiftController {
     private final GiftService giftService;
 

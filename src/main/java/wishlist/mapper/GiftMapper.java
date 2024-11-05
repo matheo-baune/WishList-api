@@ -17,10 +17,13 @@ public interface GiftMapper {
             @Mapping(source = "image_url", target = "image_url"),
             @Mapping(source = "price", target = "price"),
             @Mapping(source = "created_by", target = "created_by"),
-            @Mapping(source = "group_id", target = "group_id")
+            @Mapping(source = "group.id", target = "group_id"),
     })
     GiftDTO toDTO(Gift gift);
 
-    @InheritInverseConfiguration
+    @Mappings({
+            @Mapping(source = "group_id", target = "group.id"),
+            @Mapping(target = "group", ignore = true)
+    })
     Gift toEntity(GiftDTO giftDTO);
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import wishlist.dto.GroupDTO;
 import wishlist.dto.UserDTO;
+import wishlist.service.GroupMembersService;
 import wishlist.service.GroupService;
 
 import java.net.URI;
@@ -15,8 +16,10 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/groups")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class GroupController {
     private final GroupService groupService;
+    private final GroupMembersService groupMembersService;
 
 
     @GetMapping("/")
@@ -40,7 +43,7 @@ public class GroupController {
 
 
     @PostMapping("/")
-    public ResponseEntity<GroupDTO> createGroup(@Valid @RequestBody GroupDTO groupDTO) {
+    public ResponseEntity<GroupDTO> createGroup(@RequestBody GroupDTO groupDTO) {
         GroupDTO createdGroup = groupService.createGroup(groupDTO);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -49,6 +52,13 @@ public class GroupController {
         return ResponseEntity.created(location).body(createdGroup);
     }
 
+    @PostMapping("/{groupCode}/join/{userId}")
+    public ResponseEntity<?> joinGroup(@PathVariable String groupCode, @PathVariable Long userId) {
+        boolean isJoined = groupMembersService.joinGroup(groupCode, userId);
+        return isJoined ?
+                ResponseEntity.ok().body("User joined group successfully") :
+                ResponseEntity.internalServerError().body("User could not join group (not existed or wrong identifier)");
+    }
 
 
     @PatchMapping("/{id}")

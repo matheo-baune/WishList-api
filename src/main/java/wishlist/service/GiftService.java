@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import wishlist.Utils;
 import wishlist.dto.GiftDTO;
 import wishlist.entity.Gift;
+import wishlist.entity.Group;
 import wishlist.mapper.GiftMapper;
 import wishlist.repository.GiftRepository;
+import wishlist.repository.GroupRepository;
 import wishlist.repository.ReservationsRepository;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GiftService {
     private final ReservationsRepository reservationsRepository;
+    private final GroupRepository groupRepository;
     private final GiftRepository giftRepository;
     private final GiftMapper giftMapper;
 
@@ -40,8 +43,8 @@ public class GiftService {
 
     public GiftDTO createGift(@Valid GiftDTO giftDTO) {
         Gift gift = giftMapper.toEntity(giftDTO);
-        Gift savedGift = giftRepository.save(gift);
-        return giftMapper.toDTO(savedGift);
+        Gift giftcreated = giftRepository.save(gift);
+        return giftMapper.toDTO(giftcreated);
     }
 
     public GiftDTO updateGift(Long id, GiftDTO giftDTO) {

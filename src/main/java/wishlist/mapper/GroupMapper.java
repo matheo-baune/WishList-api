@@ -12,6 +12,7 @@ public interface GroupMapper {
     @Mappings({
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "name", target = "name"),
+            @Mapping(source = "description", target = "description"),
             @Mapping(source = "created_by", target = "created_by"),
             @Mapping(source = "code", target = "code"),
             @Mapping(source = "created_at", target = "created_at")

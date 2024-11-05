@@ -5,12 +5,14 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Schema(description = "Group object")
 @Data
 @Entity
-@Table(name = "groups")
+@Table(name = "groups", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"code"})
+})
 public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +20,9 @@ public class Group {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "created_by", nullable = false)
     private Integer created_by;
@@ -29,12 +34,16 @@ public class Group {
     @Temporal(TemporalType.TIMESTAMP)
     private Date created_at;
 
+
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Gift> gifts;
+
     @PrePersist
     protected void onCreate() {
         created_at = new Date();
     }
 
-    @OneToMany(mappedBy = "group")
-    private Set<GroupMember> groupMembers;
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GroupMember> groupMembers;
 
 }

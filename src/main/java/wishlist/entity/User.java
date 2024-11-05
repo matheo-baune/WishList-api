@@ -12,6 +12,11 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User {
+    public User(String username, String email) {
+        this.username = username;
+        this.email = email;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,8 +30,6 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "role", nullable = false)
-    private String role;
 
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -34,6 +37,10 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<GroupMember> groupMembers;
+
+    public User() {
+        
+    }
 
     @PrePersist
     protected void onCreate() {

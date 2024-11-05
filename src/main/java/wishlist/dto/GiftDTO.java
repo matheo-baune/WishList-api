@@ -32,7 +32,8 @@ public class GiftDTO {
     private Long group_id;
 
     @NotNull
-    private User created_by;
+    private Long created_by;
+
 
     @NotNull
     private Date created_at;

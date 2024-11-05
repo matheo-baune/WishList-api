@@ -13,7 +13,6 @@ public interface UserMapper {
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "username", target = "username"),
             @Mapping(source = "email", target = "email"),
-            @Mapping(source = "role", target = "role"),
             @Mapping(source = "created_at", target = "created_at")
     })
     UserDTO toDTO(User user);
