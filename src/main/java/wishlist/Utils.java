@@ -1,8 +1,11 @@
 package wishlist;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.lang.reflect.Field;
+import java.security.SecureRandom;
+import java.util.Base64;
 
 public class Utils {
     public static <D, E> void updateEntityFromDTO(@NotNull D dto, @NotNull E entity) {
@@ -26,5 +29,17 @@ public class Utils {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static String encodePassword(String rawPassword,String salt) {
+        return BCrypt.hashpw(rawPassword, salt);
+    }
+
+    public static String generateSalt() {
+        return BCrypt.gensalt();
+    }
+
+    public static boolean checkPassword(String rawPassword, String encodedPassword) {
+        return BCrypt.checkpw(rawPassword, encodedPassword);
     }
 }

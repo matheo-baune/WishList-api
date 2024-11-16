@@ -18,7 +18,7 @@ public class GroupDTO {
     private String description;
 
     @NotNull
-    private Integer created_by;
+    private Long created_by;
 
     @NotNull
     @Size(min = 1, max = 10)

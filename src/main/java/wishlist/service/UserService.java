@@ -48,6 +48,11 @@ public class UserService  {
         );
     }
 
+    public UserDTO createUser(User user) {
+        User createdUser = userRepository.save(user);
+        return userMapper.toDTO(createdUser);
+    }
+
     public List<UserDTO> getAllUsers() {
         return userRepository.findAll().stream()
                 .map(userMapper::toDTO)

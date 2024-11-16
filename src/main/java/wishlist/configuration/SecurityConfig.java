@@ -25,24 +25,11 @@ public class SecurityConfig {
     private final JwtUtils jwtUtils;
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(username -> (org.springframework.security.core.userdetails.UserDetails) userService.loadUserByUsername(username)).passwordEncoder(passwordEncoder());
-        return authenticationManagerBuilder.build();
-    }
-
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
-                        //auth.requestMatchers("/auth/*", "/swagger-ui/**","/v3/api-docs/**").permitAll()
-                        auth.requestMatchers("/**").permitAll()
+                        auth.requestMatchers("/auth/*", "/swagger-ui/**","/v3/api-docs/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtFilter(userService,jwtUtils), UsernamePasswordAuthenticationFilter.class)

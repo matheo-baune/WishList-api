@@ -3,6 +3,7 @@ package wishlist.entity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Data;
+import wishlist.Utils;
 
 import java.util.Date;
 import java.util.Set;
@@ -30,6 +31,8 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "salt", nullable = false, length = 32)
+    private String salt;
 
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -39,8 +42,9 @@ public class User {
     private Set<GroupMember> groupMembers;
 
     public User() {
-        
+
     }
+
 
     @PrePersist
     protected void onCreate() {

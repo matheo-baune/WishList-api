@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public class GroupService {
     private final GroupRepository groupRepository;
     private final GroupMembersRepository groupMembersRepository;
+    private final GroupMembersService groupMembersService;
     private final GroupMapper groupMapper;
     private final UserMapper userMapper;
 
@@ -46,6 +47,9 @@ public class GroupService {
     public GroupDTO createGroup(GroupDTO groupDTO) {
         Group group = groupMapper.toEntity(groupDTO);
         Group savedGroup = groupRepository.save(group);
+
+        groupMembersService.joinGroup(savedGroup.getCode(), groupDTO.getCreated_by());
+
         return groupMapper.toDTO(savedGroup);
     }
 

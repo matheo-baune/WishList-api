@@ -9,10 +9,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import wishlist.Utils;
 import wishlist.configuration.JwtUtils;
+import wishlist.dto.UserDTO;
 import wishlist.entity.User;
+import wishlist.mapper.UserMapper;
 import wishlist.repository.UserRepository;
+import wishlist.service.UserService;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,9 +27,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthController {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final UserMapper userMapper;
     private final JwtUtils jwtUtils;
-    private final AuthenticationManager authenticationManager;
 
 
     @GetMapping("/generate-permanent-token")
@@ -39,21 +45,34 @@ public class AuthController {
         if (userRepository.findByUsername(user.getUsername()) != null) {
             return ResponseEntity.badRequest().body("Username is already in use");
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return ResponseEntity.ok(userRepository.save(user));
+        String salt = Utils.generateSalt();
+        user.setSalt(salt);
+
+        user.setPassword(Utils.encodePassword(user.getPassword(),salt));
+        UserDTO userRegister = userService.createUser(user);
+        String token = jwtUtils.generateToken(user.getUsername());
+        //TODO - Revoir la construction du location /api devrait pas être ajouter à la main
+        URI location = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/users/{id}")
+                .buildAndExpand(userRegister.getId())
+                .toUri();
+        return ResponseEntity.created(location)
+                .header("Set-Cookie",token)
+                .body(userRegister);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
         try{
-            System.out.printf("User: %s\n", user.getUsername());
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-            System.out.println("Password: " + user.getPassword());
-            if(authentication.isAuthenticated()){
-                Map<String, Object> authData = new HashMap<>();
-                authData.put("token", jwtUtils.generateToken(user.getUsername()));
-                authData.put("type", "Bearer");
-                return ResponseEntity.ok(authData);
+            User userDatabase = userRepository.findByUsername(user.getUsername());
+            String passwordEncoded = Utils.encodePassword(user.getPassword(), userDatabase.getSalt());
+
+            if(Utils.checkPassword(user.getPassword(),passwordEncoded)){
+                UserDTO userDTO = userMapper.toDTO(userDatabase);
+                String token = jwtUtils.generateToken(user.getUsername());
+                return ResponseEntity.ok()
+                        .header("Set-Cookie",token)
+                        .body(userDTO);
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         } catch (BadCredentialsException e) {
